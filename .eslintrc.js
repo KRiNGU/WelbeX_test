@@ -21,7 +21,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
-    'no-console': ['error', { allow: ['error'] }],
+    // 'no-console': ['error', { allow: ['error'] }],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     '@typescript-eslint/no-var-requires': 'off',
