@@ -1,11 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TableElement } from '../model/table';
 
 interface TableState {
   table: TableElement[];
 }
 
-// Define the initial state using that type
 const initialState: TableState = {
   table: [],
 };
@@ -13,9 +12,13 @@ const initialState: TableState = {
 export const tableSlice = createSlice({
   name: 'table',
   initialState,
-  reducers: {},
+  reducers: {
+    getAll: (state, action: PayloadAction<TableElement[]>) => {
+      state.table = action.payload;
+    },
+  },
 });
 
-export const {} = tableSlice.actions;
+export const { getAll } = tableSlice.actions;
 
 export default tableSlice.reducer;

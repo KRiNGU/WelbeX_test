@@ -1,16 +1,17 @@
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
 
 const TablePage = () => {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch({ type: 'GET_TABLE_ELEMENTS_BY_PAGE' });
+  const handleLoad = useCallback(() => {
+    dispatch({ type: 'GET_FULL_TABLE' });
   }, [dispatch]);
 
   return (
     <>
       <h1>Привет</h1>
+      <button onClick={handleLoad}>Загрузить таблицу</button>
     </>
   );
 };

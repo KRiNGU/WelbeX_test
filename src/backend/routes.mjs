@@ -7,55 +7,61 @@ const port = 8000;
 const controller = new Controller();
 
 const requestListener = async (req, res) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+    'Access-Control-Max-Age': 2592000, // 30 days
+    /** add other headers as per requirement */
+  };
   res.setHeader('Content-Type', 'application/json');
 
-  if (req.url === '/element') {
+  if (req.url === '/api/elements') {
     if (req.method === 'POST') {
       const newTableElement = await controller.createTableElement(req);
-      res.writeHead(200);
+      res.writeHead(200, headers);
       res.end(JSON.stringify(newTableElement));
       return;
     } else if (req.method === 'GET') {
       const newTableElements = await controller.getAllTableElement();
-      res.writeHead(200);
+      res.writeHead(200, headers);
       res.end(JSON.stringify(newTableElements));
       return;
     }
   }
 
-  if (/element\/\d+/.test(req.url)) {
+  if (/\/api\/elements\/\d+/.test(req.url)) {
     if (req.method === 'GET') {
       const getTableElement = await controller.getTableElement(req);
       if (!getTableElement) {
-        res.writeHead(404);
+        res.writeHead(404, headers);
         res.end('Not found');
         return;
       }
-      res.writeHead(200);
+      res.writeHead(200, headers);
       res.end(JSON.stringify(getTableElement));
       return;
     }
   }
 
-  if (/element?/.test(req.url)) {
+  if (/\/api\/elements?/.test(req.url)) {
     let getTableByPageResult;
     try {
       getTableByPageResult = await controller.getTableElementsByPage(req);
     } catch (e) {
-      res.writeHead(400);
+      res.writeHead(400, headers);
       res.end('Bad request');
       return;
     }
     if (!getTableByPageResult.element.length) {
-      res.writeHead(404);
+      res.writeHead(404, headers);
       res.end('Not found');
       return;
     }
-    res.writeHead(200);
+    res.writeHead(200, headers);
     res.end(JSON.stringify(getTableByPageResult));
     return;
   }
-  res.writeHead(404);
+  res.writeHead(404, headers);
   res.end('Request not found');
 };
 

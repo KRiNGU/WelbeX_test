@@ -16,7 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.2",
+    "axios": "^0.27.2",
     "dotenv": "^16.0.1",
+    "dotenv-webpack": "^7.1.0",
     "pg": "^8.7.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
