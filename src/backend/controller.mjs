@@ -53,7 +53,7 @@ class Controller {
     const pageCount =
       (tableElementNumber - (tableElementNumber % limit)) / limit +
       (tableElementNumber % limit === 0 ? 0 : 1);
-    return { element: getTableDBAnswer.rows, pages: pageCount };
+    return { table: getTableDBAnswer.rows, pages: pageCount };
   }
 }
 

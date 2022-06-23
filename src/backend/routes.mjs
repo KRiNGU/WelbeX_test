@@ -52,7 +52,7 @@ const requestListener = async (req, res) => {
       res.end('Bad request');
       return;
     }
-    if (!getTableByPageResult.element.length) {
+    if (!getTableByPageResult.table.length) {
       res.writeHead(404, headers);
       res.end('Not found');
       return;

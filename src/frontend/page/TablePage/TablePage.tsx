@@ -5,7 +5,7 @@ const TablePage = () => {
   const dispatch = useAppDispatch();
 
   const handleLoad = useCallback(() => {
-    dispatch({ type: 'GET_FULL_TABLE' });
+    dispatch({ type: 'GET_TABLE_PAGE', payload: { page: 0, limit: 1 } });
   }, [dispatch]);
 
   return (
