@@ -15,7 +15,6 @@ function* getTablePage({
 }: tableTypes.GetTablePageSagaProps) {
   try {
     const { data } = yield call(TableDataService.getPage, { page, limit });
-    console.log(data);
     yield put(tableActions.getTablePage(data));
   } catch (e) {}
 }
