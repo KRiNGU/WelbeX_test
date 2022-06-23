@@ -1,12 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-type TableElement = {
-  id: number;
-  name: string;
-  date: string;
-  number: number;
-  distance: number;
-};
+import { TableElement } from '../model/table';
 
 interface TableState {
   table: TableElement[];

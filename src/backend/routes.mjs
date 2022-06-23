@@ -8,6 +8,7 @@ const controller = new Controller();
 
 const requestListener = async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
+
   if (req.url === '/element') {
     if (req.method === 'POST') {
       const newTableElement = await controller.createTableElement(req);
@@ -21,6 +22,7 @@ const requestListener = async (req, res) => {
       return;
     }
   }
+
   if (/element\/\d+/.test(req.url)) {
     if (req.method === 'GET') {
       const getTableElement = await controller.getTableElement(req);
@@ -33,6 +35,25 @@ const requestListener = async (req, res) => {
       res.end(JSON.stringify(getTableElement));
       return;
     }
+  }
+
+  if (/element?/.test(req.url)) {
+    let getTableElement;
+    try {
+      getTableElement = await controller.getTableElementsByPage(req);
+    } catch (e) {
+      res.writeHead(400);
+      res.end('Bad request');
+      return;
+    }
+    if (!getTableElement.length) {
+      res.writeHead(404);
+      res.end('Not found');
+      return;
+    }
+    res.writeHead(200);
+    res.end(JSON.stringify(getTableElement));
+    return;
   }
   res.writeHead(404);
   res.end('Request not found');

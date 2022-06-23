@@ -30,6 +30,22 @@ class Controller {
     const getTableElements = await db.query(`SELECT * FROM table_element`);
     return getTableElements.rows;
   }
+
+  async getTableElementsByPage(req) {
+    const url = req.url.split('/');
+    const lastUrlElement = url[url.length - 1];
+    const pageResult = lastUrlElement.match(/page=[0-9]+/);
+    const limitResult = lastUrlElement.match(/limit=[0-9]+/);
+    if (pageResult === null || limitResult === null) {
+      throw new Error('Page or result is null');
+    }
+    const page = pageResult[0].substring(5);
+    const limit = limitResult[0].substring(6);
+    const getTableElements = await db.query(
+      `SELECT * FROM table_element LIMIT ${limit} OFFSET ${page * limit};`
+    );
+    return getTableElements.rows;
+  }
 }
 
 export default Controller;
