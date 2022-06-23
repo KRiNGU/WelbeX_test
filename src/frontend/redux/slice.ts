@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TableElement } from '../model/table';
 import { GetTablePageSliceProps } from './type';
 
-interface TableState {
+export interface TableState {
   table: TableElement[];
   pages: number;
 }

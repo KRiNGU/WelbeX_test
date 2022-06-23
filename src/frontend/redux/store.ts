@@ -6,7 +6,7 @@ import rootSaga from './sagas';
 const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
-  reducer: { table },
+  reducer: table,
   middleware: [sagaMiddleware],
   devTools: process.env.NODE_ENV !== 'production',
 });
