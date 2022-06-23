@@ -38,21 +38,21 @@ const requestListener = async (req, res) => {
   }
 
   if (/element?/.test(req.url)) {
-    let getTableElement;
+    let getTableByPageResult;
     try {
-      getTableElement = await controller.getTableElementsByPage(req);
+      getTableByPageResult = await controller.getTableElementsByPage(req);
     } catch (e) {
       res.writeHead(400);
       res.end('Bad request');
       return;
     }
-    if (!getTableElement.length) {
+    if (!getTableByPageResult.element.length) {
       res.writeHead(404);
       res.end('Not found');
       return;
     }
     res.writeHead(200);
-    res.end(JSON.stringify(getTableElement));
+    res.end(JSON.stringify(getTableByPageResult));
     return;
   }
   res.writeHead(404);

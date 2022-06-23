@@ -41,10 +41,19 @@ class Controller {
     }
     const page = pageResult[0].substring(5);
     const limit = limitResult[0].substring(6);
-    const getTableElements = await db.query(
+    const getTableDBAnswer = await db.query(
       `SELECT * FROM table_element LIMIT ${limit} OFFSET ${page * limit};`
     );
-    return getTableElements.rows;
+    const getTableEmenentCountDBAnswer = await db.query(
+      `SELECT count(*) FROM table_element`
+    );
+    const tableElementNumber = parseInt(
+      getTableEmenentCountDBAnswer.rows[0].count
+    );
+    const pageCount =
+      (tableElementNumber - (tableElementNumber % limit)) / limit +
+      (tableElementNumber % limit === 0 ? 0 : 1);
+    return { element: getTableDBAnswer.rows, pages: pageCount };
   }
 }
 
