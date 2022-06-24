@@ -11,11 +11,17 @@ const requestListener = async (req, res) => {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
     'Access-Control-Max-Age': 2592000, // 30 days
-    /** add other headers as per requirement */
   };
   res.setHeader('Content-Type', 'application/json');
 
   if (req.url === '/api/elements') {
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204, headers, {
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      });
+      res.end();
+      return;
+    }
     if (req.method === 'POST') {
       const newTableElement = await controller.createTableElement(req);
       res.writeHead(200, headers);
@@ -52,20 +58,13 @@ const requestListener = async (req, res) => {
       res.end('Bad request');
       return;
     }
-    if (!getTableByPageResult.table.length) {
-      res.writeHead(404, headers);
-      res.end('Not found');
-      return;
-    }
     res.writeHead(200, headers);
     res.end(JSON.stringify(getTableByPageResult));
     return;
   }
-  res.writeHead(404, headers);
+  res.writeHead(405, headers);
   res.end('Request not found');
 };
 
 const server = http.createServer(requestListener);
-server.listen(port, host, () => {
-  console.log(`Server is running on http://${host}:${port}`);
-});
+server.listen(port, host);

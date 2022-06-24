@@ -3,6 +3,16 @@ import mainAxios from './api';
 export interface GetPageProps {
   page: number;
   limit: number;
+  filter: string | undefined;
+  action: string | undefined;
+  value: string | undefined;
+}
+
+export interface CreateElementProps {
+  name: string;
+  date: string;
+  number: number;
+  distance: number;
 }
 
 class TableDataService {
@@ -10,8 +20,17 @@ class TableDataService {
     return mainAxios.get('/elements');
   }
 
-  async getPage({ page, limit }: GetPageProps) {
-    return mainAxios.get(`/element?page=${page}&limit=${limit}`);
+  async getPage({ page, limit, filter, action, value }: GetPageProps) {
+    return mainAxios.get(
+      `/elements?page=${page}&limit=${limit}` +
+        (filter && action && value
+          ? `&filter=${filter}&action=${action}&value=${value}`
+          : '')
+    );
+  }
+
+  async createElement({ name, date, number, distance }: CreateElementProps) {
+    return mainAxios.post(`/elements`, { name, date, number, distance });
   }
 }
 
