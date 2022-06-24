@@ -15,6 +15,7 @@ export interface CreateElementProps {
   distance: number;
 }
 
+// Класс общения с сервером
 class TableDataService {
   async getAll() {
     return mainAxios.get('/elements');

@@ -20,6 +20,7 @@ export const tableSlice = createSlice({
       state.table = action.payload;
     },
     getTablePage: (state, action: PayloadAction<GetTablePageSliceProps>) => {
+      // Поле table будем перезаписывать для каждой страницы
       state.table = action.payload.table;
       state.pages = action.payload.pages;
     },

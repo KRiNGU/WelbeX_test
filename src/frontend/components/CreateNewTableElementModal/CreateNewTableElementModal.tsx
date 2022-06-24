@@ -15,6 +15,7 @@ interface CreateNewTableElementModalProps {
   onClose: () => void;
 }
 
+// Здесь модальное окно для создания нового элемента таблицы
 const CreateNewTableElementModal = ({
   onSubmit,
   onClose,
@@ -39,17 +40,22 @@ const CreateNewTableElementModal = ({
 
   const handleChangeName = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value[e.target.value.length - 1].match(/[a-zA-Z0-9]/)) {
+      // Запрещаем пользователю ввод любых символов, кроме a-z, заглавных и цифр
+      if (e.target.value.match(/[a-zA-Z0-9]/)) {
         setNewName(e.target.value);
-      } else if (!e.target.value) {
+        // Учитываем, что в пустом вводе e.target.value будет undefined
+      } else if (e.target.value) {
         setNewName('');
       }
     },
     [setNewName]
   );
 
+  // Вызывается при нажатии на область вокруг модального окна
   const handleClose = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
+      // Если мы нажали именно на область вокруг модального окна, а не всплыли к нему,
+      // то закрываем модальное окно, не очищая значения
       if (e.target === e.currentTarget) {
         onClose();
       }
@@ -82,6 +88,7 @@ const CreateNewTableElementModal = ({
         <input
           required
           className={styles.input}
+          // Прописываем паттерн для даты
           pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
           type="date"
           id="newDate"
@@ -95,9 +102,11 @@ const CreateNewTableElementModal = ({
           required
           placeholder="Количество"
           className={styles.input}
+          // Числовой тип
           type="number"
           id="newNumber"
           value={newNumber}
+          // Парсим в number, чтобы не было ошибок типизации useState
           onChange={(e) => setNewNumber(parseInt(e.target.value))}
         />
         <label className={styles.label} htmlFor="newDistance">
@@ -107,9 +116,11 @@ const CreateNewTableElementModal = ({
           required
           placeholder="Расстояние"
           className={styles.input}
+          // Числовой тип
           type="number"
           id="newDistance"
           value={newDistance}
+          // Парсим в number, чтобы не было ошибок типизации useState
           onChange={(e) => setNewDistance(parseInt(e.target.value))}
         />
         <button type="submit" className={styles.button}>

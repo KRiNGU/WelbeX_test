@@ -1,3 +1,4 @@
+// Описываем модель элемента таблицы
 export type TableElement = {
   id: number;
   name: string;

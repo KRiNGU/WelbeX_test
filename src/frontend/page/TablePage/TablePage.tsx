@@ -11,13 +11,14 @@ const limits = [5, 10, 15, 20, 25, 30];
 const TablePage = () => {
   const dispatch = useAppDispatch();
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit, setLimit] = useState<number>(limits[0]);
   const [filterField, setFilterField] = useState<string>('');
   const [filterAction, setFilterAction] = useState<string>('');
   const [filterValue, setFilterValue] = useState<string>('');
   const [isCreateModalOpened, setIsCreateModalOpened] =
     useState<boolean>(false);
 
+  // Получаем новый ответ от БД каждый раз при изменении интересующих нас значений
   useEffect(() => {
     dispatch({
       type: 'GET_TABLE_PAGE',
@@ -31,6 +32,7 @@ const TablePage = () => {
     });
   }, [dispatch, page, limit, filterField, filterAction, filterValue]);
 
+  // Вытягиваем таблицу из state
   const { table: tableElements, pages }: TableState = useSelector<
     TableState,
     TableState
@@ -58,9 +60,11 @@ const TablePage = () => {
 
   const handleSetFilterField = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
+      // Если действие было "Содержит", то обнуляем его, так как filterField может измениться на числовое значение, которе не может "включать"
       if (filterAction === 'inc') {
         setFilterAction('');
       }
+      // Зануляем filterValue
       setFilterValue('');
       setFilterField(e.target.value);
     },
@@ -69,6 +73,7 @@ const TablePage = () => {
 
   const handleSetFilterAction = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
+      // Зануляем filterValue
       setFilterValue('');
       setFilterAction(e.target.value);
     },
@@ -77,14 +82,16 @@ const TablePage = () => {
 
   const handleChangeFilterValue = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
+      // Если мы фильтруем по числам, то отсекаем любые вводы кроме числа
       if (filterField === 'number' || filterField === 'distance') {
-        if (e.target.value[e.target.value.length - 1]?.match(/[0-9]/)) {
+        if (e.target.value.match(/[0-9]/)) {
           setFilterValue(e.target.value);
         } else if (!e.target.value) {
           setFilterValue('');
         }
       } else {
-        if (e.target.value[e.target.value.length - 1]?.match(/[a-zA-Z0-9]/)) {
+        // Иначе отсекаем любые вводы кроме a-z, заглавных букв и чисел
+        if (e.target.value.match(/[a-zA-Z0-9]/)) {
           setFilterValue(e.target.value);
         } else if (!e.target.value) {
           setFilterValue('');
@@ -100,6 +107,8 @@ const TablePage = () => {
         type: 'CREATE_TABLE_ELEMENT',
         payload: { name, date, number, distance },
       });
+      // После создания нового элемента закрываем модальное окно.
+      // Значения в модальном окне не зануляем, ведь нам может потребоваться создавать данные, близкие по значению
       setIsCreateModalOpened(false);
     },
     [dispatch]
@@ -128,6 +137,7 @@ const TablePage = () => {
           <option value="eq">Равно</option>
           <option
             value="inc"
+            // Если поле фильтрации числовое, то отключаем выбор "Содержит"
             disabled={filterField === 'number' || filterField === 'distance'}
           >
             Включает
@@ -174,7 +184,8 @@ const TablePage = () => {
         </button>
         <button
           className={styles.tableControlButton}
-          disabled={page === 1 || pages === 0}
+          // Дополнительно отключаем кнопку предыдущей страницы, если число страниц равно 0 или 1
+          disabled={page === 1 || pages === 0 || pages === 1}
           onClick={handlePrevPageButton}
         >
           {'<'}
